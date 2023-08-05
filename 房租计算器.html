@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>·¿¿ÍÖ§¸¶·ÑÓÃ¼ÆËãÆ÷</title>
+  <title>æˆ¿å®¢æ”¯ä»˜è´¹ç”¨è®¡ç®—å™¨</title>
+   <meta charset="utf-8">
   <style>
     .highlight {
       background-color: yellow;
@@ -9,53 +10,53 @@
   </style>
 </head>
 <body>
-  <h1>·¿¿ÍÖ§¸¶·ÑÓÃ¼ÆËãÆ÷</h1>
+  <h1>æˆ¿å®¢æ”¯ä»˜è´¹ç”¨è®¡ç®—å™¨</h1>
 
-  <h3>ÊäÈëĞÅÏ¢</h3>
-  <label for="currentWater">±¾ÔÂË®±í¶ÁÊı£º</label>
+  <h3>è¾“å…¥ä¿¡æ¯</h3>
+  <label for="currentWater">æœ¬æœˆæ°´è¡¨è¯»æ•°ï¼š</label>
   <input type="number" id="currentWater"><br>
 
-  <label for="previousWater">ÉÏÔÂË®±í¶ÁÊı£º</label>
+  <label for="previousWater">ä¸Šæœˆæ°´è¡¨è¯»æ•°ï¼š</label>
   <input type="number" id="previousWater"><br>
 
-  <label for="currentElectricity">±¾ÔÂµç±í¶ÁÊı£º</label>
+  <label for="currentElectricity">æœ¬æœˆç”µè¡¨è¯»æ•°ï¼š</label>
   <input type="number" id="currentElectricity"><br>
 
-  <label for="previousElectricity">ÉÏÔÂµç±í¶ÁÊı£º</label>
+  <label for="previousElectricity">ä¸Šæœˆç”µè¡¨è¯»æ•°ï¼š</label>
   <input type="number" id="previousElectricity"><br>
 
-  <label for="rent">·¿×â£º</label>
+  <label for="rent">æˆ¿ç§Ÿï¼š</label>
   <input type="number" id="rent"><br>
 
-  <label for="chargingFee">³äµç·Ñ£º</label>
+  <label for="chargingFee">å……ç”µè´¹ï¼š</label>
   <input type="number" id="chargingFee" value="15"><br>
 
-  <h4>Ä¬ÈÏ¼ÓÈë·ÑÓÃ£º</h4>
+  <h4>é»˜è®¤åŠ å…¥è´¹ç”¨ï¼š</h4>
   <input type="checkbox" id="garbageFee" checked>
-  <label for="garbageFee">À¬»ø·Ñ£¨5Ôª£©</label><br>
+  <label for="garbageFee">åƒåœ¾è´¹ï¼ˆ5å…ƒï¼‰</label><br>
 
   <input type="checkbox" id="stairCleaningFee" checked>
-  <label for="stairCleaningFee">Â¥ÌİÎÀÉú·Ñ£¨4Ôª£©</label><br>
+  <label for="stairCleaningFee">æ¥¼æ¢¯å«ç”Ÿè´¹ï¼ˆ4å…ƒï¼‰</label><br>
 
   <input type="checkbox" id="elevatorElectricityFee" checked>
-  <label for="elevatorElectricityFee">Â¥µç·Ñ£¨4Ôª£©</label><br>
+  <label for="elevatorElectricityFee">æ¥¼ç”µè´¹ï¼ˆ4å…ƒï¼‰</label><br>
 
-  <h4>µçÁ¦µ¥¼Û£º</h4>
+  <h4>ç”µåŠ›å•ä»·ï¼š</h4>
   <input type="radio" name="electricityRate" value="1" checked>
-  <label for="electricityRate">1Ôª/¶È</label><br>
+  <label for="electricityRate">1å…ƒ/åº¦</label><br>
 
   <input type="radio" name="electricityRate" value="0.95">
-  <label for="electricityRate">0.95Ôª/¶È</label><br>
+  <label for="electricityRate">0.95å…ƒ/åº¦</label><br>
 
   <input type="radio" name="electricityRate" value="0.75">
-  <label for="electricityRate">0.75Ôª/¶È</label><br>
+  <label for="electricityRate">0.75å…ƒ/åº¦</label><br>
 
   <input type="radio" name="electricityRate" value="0.65">
-  <label for="electricityRate">0.65Ôª/¶È</label><br>
+  <label for="electricityRate">0.65å…ƒ/åº¦</label><br>
 
-  <button onclick="calculatePayment()">¼ÆËã·ÑÓÃ</button>
+  <button onclick="calculatePayment()">è®¡ç®—è´¹ç”¨</button>
 
-  <h3>Ö§¸¶·ÑÓÃ½á¹û</h3>
+  <h3>æ”¯ä»˜è´¹ç”¨ç»“æœ</h3>
   <div id="paymentResults"></div>
 
   <script>
@@ -78,14 +79,14 @@
       var electricityCost = electricityConsumption * electricityRate;
       var totalCost = rent + chargingFee + garbageFee + stairCleaningFee + elevatorElectricityFee + waterCost + electricityCost;
 
-      var results = "<p>Ë®·Ñ£º" + waterCost.toFixed(2) + "Ôª</p>";
-      results += "<p>µç·Ñ£º" + electricityCost.toFixed(2) + "Ôª</p>";
-      results += "<p>·¿×â£º" + rent.toFixed(2) + "Ôª</p>";
-      results += "<p>³äµç·Ñ£º" + chargingFee.toFixed(2) + "Ôª</p>";
-      results += "<p>À¬»ø·Ñ£º" + garbageFee.toFixed(2) + "Ôª</p>";
-      results += "<p>Â¥ÌİÎÀÉú·Ñ£º" + stairCleaningFee.toFixed(2) + "Ôª</p>";
-      results += "<p>Â¥µç·Ñ£º" + elevatorElectricityFee.toFixed(2) + "Ôª</p>";
-      results += "<p>×Ü·ÑÓÃ£º" + totalCost.toFixed(2) + "Ôª</p>";
+      var results = "<p>æ°´è´¹ï¼š" + waterCost.toFixed(2) + "å…ƒ</p>";
+      results += "<p>ç”µè´¹ï¼š" + electricityCost.toFixed(2) + "å…ƒ</p>";
+      results += "<p>æˆ¿ç§Ÿï¼š" + rent.toFixed(2) + "å…ƒ</p>";
+      results += "<p>å……ç”µè´¹ï¼š" + chargingFee.toFixed(2) + "å…ƒ</p>";
+      results += "<p>åƒåœ¾è´¹ï¼š" + garbageFee.toFixed(2) + "å…ƒ</p>";
+      results += "<p>æ¥¼æ¢¯å«ç”Ÿè´¹ï¼š" + stairCleaningFee.toFixed(2) + "å…ƒ</p>";
+      results += "<p>æ¥¼ç”µè´¹ï¼š" + elevatorElectricityFee.toFixed(2) + "å…ƒ</p>";
+      results += "<p>æ€»è´¹ç”¨ï¼š" + totalCost.toFixed(2) + "å…ƒ</p>";
 
       document.getElementById("paymentResults").innerHTML = results;
     }
