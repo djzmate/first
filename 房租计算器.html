@@ -1,56 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>·¿¿Í·ÑÓÃ¼ÆËãÆ÷</title>
+    <title>æˆ¿å®¢è´¹ç”¨è®¡ç®—å™¨</title>
+     <meta charset="utf-8">
 </head>
 <body>
-    <h1>·¿¿Í·ÑÓÃ¼ÆËãÆ÷</h1>
+    <h1>æˆ¿å®¢è´¹ç”¨è®¡ç®—å™¨</h1>
 
     <form id="calculatorForm">
-        <label for="currentWater">±¾ÔÂË®±íÊı£º</label>
+        <label for="currentWater">æœ¬æœˆæ°´è¡¨æ•°ï¼š</label>
         <input type="number" id="currentWater" step="1" min="0"><br><br>
 
-        <label for="previousWater">ÉÏ¸öÔÂË®±íÊı£º</label>
+        <label for="previousWater">ä¸Šä¸ªæœˆæ°´è¡¨æ•°ï¼š</label>
         <input type="number" id="previousWater" step="1" min="0"><br><br>
 
-        <label for="currentElectricity">±¾ÔÂµç±íÊı£º</label>
+        <label for="currentElectricity">æœ¬æœˆç”µè¡¨æ•°ï¼š</label>
         <input type="number" id="currentElectricity" step="1" min="0"><br><br>
 
-        <label for="previousElectricity">ÉÏ¸öÔÂµç±íÊı£º</label>
+        <label for="previousElectricity">ä¸Šä¸ªæœˆç”µè¡¨æ•°ï¼š</label>
         <input type="number" id="previousElectricity" step="1" min="0"><br><br>
 
-        <label for="rent">·¿×â£º</label>
+        <label for="rent">æˆ¿ç§Ÿï¼š</label>
         <input type="number" id="rent" step="1" min="0"><br><br>
 
-        <label for="chargingFee">³äµç·Ñ£º</label>
+        <label for="chargingFee">å……ç”µè´¹ï¼š</label>
         <input type="number" id="chargingFee" step="1" min="0" value="15"><br><br>
 
-        <label for="garbageFee">À¬»ø·Ñ£º</label>
+        <label for="garbageFee">åƒåœ¾è´¹ï¼š</label>
         <input type="checkbox" id="garbageFee" checked><br><br>
 
-        <label for="stairCleaningFee">Â¥ÌİÎÀÉú·Ñ£º</label>
+        <label for="stairCleaningFee">æ¥¼æ¢¯å«ç”Ÿè´¹ï¼š</label>
         <input type="checkbox" id="stairCleaningFee" checked><br><br>
 
-        <label for="buildingElectricityFee">Â¥µç·Ñ£º</label>
+        <label for="buildingElectricityFee">æ¥¼ç”µè´¹ï¼š</label>
         <input type="checkbox" id="buildingElectricityFee" checked><br><br>
 
-        <label for="electricityRate">µç·Ñµ¥¼Û£º</label>
+        <label for="electricityRate">ç”µè´¹å•ä»·ï¼š</label>
         <select id="electricityRate">
-            <option value="1">1Ôª/¶È</option>
-            <option value="0.95">0.95Ôª/¶È</option>
-            <option value="0.75">0.75Ôª/¶È</option>
-            <option value="0.65">0.65Ôª/¶È</option>
+            <option value="1">1å…ƒ/åº¦</option>
+            <option value="0.95">0.95å…ƒ/åº¦</option>
+            <option value="0.75">0.75å…ƒ/åº¦</option>
+            <option value="0.65">0.65å…ƒ/åº¦</option>
         </select><br><br>
 
-        <button type="button" onclick="calculate()">¼ÆËã</button>
-        <button type="reset">ÖØÖÃ</button>
+        <button type="button" onclick="calculate()">è®¡ç®—</button>
+        <button type="reset">é‡ç½®</button>
     </form>
 
     <div id="result"></div>
 
     <script>
         function calculate() {
-            // »ñÈ¡ÊäÈëÖµ
+            // è·å–è¾“å…¥å€¼
             var currentWater = parseFloat(document.getElementById("currentWater").value) || 0;
             var previousWater = parseFloat(document.getElementById("previousWater").value) || 0;
             var currentElectricity = parseFloat(document.getElementById("currentElectricity").value) || 0;
@@ -62,14 +63,14 @@
             var buildingElectricityFee = document.getElementById("buildingElectricityFee").checked;
             var electricityRate = parseFloat(document.getElementById("electricityRate").value);
 
-            // ¼ÆËãË®·ÑºÍµç·Ñ
+            // è®¡ç®—æ°´è´¹å’Œç”µè´¹
             var waterUsage = currentWater - previousWater;
             var waterFee = waterUsage * 5;
 
             var electricityUsage = currentElectricity - previousElectricity;
             var electricityFee = electricityUsage * electricityRate;
 
-            // ¼ÆËãÆäËû·ÑÓÃ
+            // è®¡ç®—å…¶ä»–è´¹ç”¨
             var additionalFees = 0;
             if (garbageFee) {
                 additionalFees += 5;
@@ -81,17 +82,17 @@
                 additionalFees += 4;
             }
 
-            // ¼ÆËã×Ü·ÑÓÃ
+            // è®¡ç®—æ€»è´¹ç”¨
             var totalAmount = rent + chargingFee + waterFee + electricityFee + additionalFees;
 
-            // ÏÔÊ¾½á¹û
+            // æ˜¾ç¤ºç»“æœ
             var resultElement = document.getElementById("result");
-            resultElement.innerHTML = "Ë®·Ñ£º" + waterFee + "Ôª<br>";
-            resultElement.innerHTML += "µç·Ñ£º" + electricityFee + "Ôª<br>";
-            resultElement.innerHTML += "ÆäËû·ÑÓÃ£º" + additionalFees + "Ôª<br>";
-            resultElement.innerHTML += "·¿¿ÍÓ¦Ö§¸¶½ğ¶î£º" + totalAmount + "Ôª";
+            resultElement.innerHTML = "æ°´è´¹ï¼š" + waterFee + "å…ƒ<br>";
+            resultElement.innerHTML += "ç”µè´¹ï¼š" + electricityFee + "å…ƒ<br>";
+            resultElement.innerHTML += "å…¶ä»–è´¹ç”¨ï¼š" + additionalFees + "å…ƒ<br>";
+            resultElement.innerHTML += "æˆ¿å®¢åº”æ”¯ä»˜é‡‘é¢ï¼š" + totalAmount + "å…ƒ";
 
-            // ¸ù¾İÌõ¼şÉèÖÃÑùÊ½
+            // æ ¹æ®æ¡ä»¶è®¾ç½®æ ·å¼
             if (currentWater === 0 || previousWater === 0 || currentElectricity === 0 || previousElectricity === 0) {
                 resultElement.style.backgroundColor = "yellow";
             } else {
