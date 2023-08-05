@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>费用计算器</title>
+     <meta charset="utf-8"> 
+    <style>
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <h1>房租计算器</h1>
+
+    <form id="calculatorForm">
+        <label for="waterThisMonth">本月水表示数：</label>
+        <input type="number" id="waterThisMonth" name="waterThisMonth"><br><br>
+
+        <label for="waterLastMonth">上月水表示数：</label>
+        <input type="number" id="waterLastMonth" name="waterLastMonth"><br><br>
+
+        <label for="electricityThisMonth">本月电表示数：</label>
+        <input type="number" id="electricityThisMonth" name="electricityThisMonth"><br><br>
+
+        <label for="electricityLastMonth">上月电表示数：</label>
+        <input type="number" id="electricityLastMonth" name="electricityLastMonth"><br><br>
+
+        <label for="electricityRate">电费单价：</label>
+        <select id="electricityRate" name="electricityRate">
+            <option value="1.00">1元每度</option>
+            <option value="0.95">0.95元每度</option>
+            <option value="0.75">0.75元每度</option>
+            <option value="0.65">0.65元每度</option>
+        </select><br><br>
+
+        <label for="includeAdditionalFees">是否包含额外费用：</label>
+        <input type="checkbox" id="includeAdditionalFees" name="includeAdditionalFees"><br><br>
+
+        <label for="chargingFee">充电费：</label>
+        <input type="number" id="chargingFee" name="chargingFee"><br><br>
+
+        <label for="rent">房租：</label>
+        <input type="number" id="rent" name="rent"><br><br>
+
+        <input type="submit" value="计算费用">
+    </form>
+
+    <h2>详细费用</h2>
+    <div id="detailedCost"></div>
+
+    <script>
+        document.getElementById("calculatorForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var waterThisMonth = parseFloat(document.getElementById("waterThisMonth").value) || 0;
+            var waterLastMonth = parseFloat(document.getElementById("waterLastMonth").value) || 0;
+            var electricityThisMonth = parseFloat(document.getElementById("electricityThisMonth").value) || 0;
+            var electricityLastMonth = parseFloat(document.getElementById("electricityLastMonth").value) || 0;
+            var electricityRate = parseFloat(document.getElementById("electricityRate").value);
+            var includeAdditionalFees = document.getElementById("includeAdditionalFees").checked;
+            var chargingFee = parseFloat(document.getElementById("chargingFee").value) || 0;
+            var rent = parseFloat(document.getElementById("rent").value);
+
+            var waterCost = 5 * (waterThisMonth - waterLastMonth);
+            var electricityCost = electricityRate * (electricityThisMonth - electricityLastMonth);
+            var additionalFees = 0;
+
+            if (includeAdditionalFees) {
+                additionalFees = 5 + 4 + 4;
+            }
+
+            var totalCost = waterCost + electricityCost + additionalFees + chargingFee + rent;
+
+            var detailedCostElement = document.getElementById("detailedCost");
+            detailedCostElement.innerHTML = "";
+
+            if (waterThisMonth === 0 || waterLastMonth === 0) {
+                detailedCostElement.innerHTML += "<p class='highlight'>水表示数未输入</p>";
+            }
+
+            if (electricityThisMonth === 0 || electricityLastMonth === 0) {
+                detailedCostElement.innerHTML += "<p class='highlight'>电表示数未输入</p>";
+            }
+
+            if (!includeAdditionalFees) {
+                detailedCostElement.innerHTML += "<p class='highlight'>额外费用未选择</p>";
+            }
+
+            detailedCostElement.innerHTML += "<p>水费：" + waterCost.toFixed(2) + "元</p>";
+            detailedCostElement.innerHTML += "<p>电费：" + electricityCost.toFixed(2) + "元</p>";
+            detailedCostElement.innerHTML += "<p>额外费用：" + additionalFees.toFixed(2) + "元</p>";
+            detailedCostElement.innerHTML += "<p>充电费：" + chargingFee.toFixed(2) + "元</p>";
+            detailedCostElement.innerHTML += "<p>房租：" + rent.toFixed(2) + "元</p>";
+            detailedCostElement.innerHTML += "<h3>总费用：" + totalCost.toFixed(2) + "元</h3>";
+        });
+    </script>
+</body>
+</html>
