@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>房客费用计算器</title>
+</head>
+<body>
+    <h1>房客费用计算器</h1>
+
+    <form id="calculatorForm">
+        <label for="currentWater">本月水表数：</label>
+        <input type="number" id="currentWater" step="1" min="0"><br><br>
+
+        <label for="previousWater">上个月水表数：</label>
+        <input type="number" id="previousWater" step="1" min="0"><br><br>
+
+        <label for="currentElectricity">本月电表数：</label>
+        <input type="number" id="currentElectricity" step="1" min="0"><br><br>
+
+        <label for="previousElectricity">上个月电表数：</label>
+        <input type="number" id="previousElectricity" step="1" min="0"><br><br>
+
+        <label for="rent">房租：</label>
+        <input type="number" id="rent" step="1" min="0"><br><br>
+
+        <label for="chargingFee">充电费：</label>
+        <input type="number" id="chargingFee" step="1" min="0" value="15"><br><br>
+
+        <label for="garbageFee">垃圾费：</label>
+        <input type="checkbox" id="garbageFee" checked><br><br>
+
+        <label for="stairCleaningFee">楼梯卫生费：</label>
+        <input type="checkbox" id="stairCleaningFee" checked><br><br>
+
+        <label for="buildingElectricityFee">楼电费：</label>
+        <input type="checkbox" id="buildingElectricityFee" checked><br><br>
+
+        <label for="electricityRate">电费单价：</label>
+        <select id="electricityRate">
+            <option value="1">1元/度</option>
+            <option value="0.95">0.95元/度</option>
+            <option value="0.75">0.75元/度</option>
+            <option value="0.65">0.65元/度</option>
+        </select><br><br>
+
+        <button type="button" onclick="calculate()">计算</button>
+        <button type="reset">重置</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function calculate() {
+            // 获取输入值
+            var currentWater = parseFloat(document.getElementById("currentWater").value) || 0;
+            var previousWater = parseFloat(document.getElementById("previousWater").value) || 0;
+            var currentElectricity = parseFloat(document.getElementById("currentElectricity").value) || 0;
+            var previousElectricity = parseFloat(document.getElementById("previousElectricity").value) || 0;
+            var rent = parseFloat(document.getElementById("rent").value) || 0;
+            var chargingFee = parseFloat(document.getElementById("chargingFee").value) || 15;
+            var garbageFee = document.getElementById("garbageFee").checked;
+            var stairCleaningFee = document.getElementById("stairCleaningFee").checked;
+            var buildingElectricityFee = document.getElementById("buildingElectricityFee").checked;
+            var electricityRate = parseFloat(document.getElementById("electricityRate").value);
+
+            // 计算水费和电费
+            var waterUsage = currentWater - previousWater;
+            var waterFee = waterUsage * 5;
+
+            var electricityUsage = currentElectricity - previousElectricity;
+            var electricityFee = electricityUsage * electricityRate;
+
+            // 计算其他费用
+            var additionalFees = 0;
+            if (garbageFee) {
+                additionalFees += 5;
+            }
+            if (stairCleaningFee) {
+                additionalFees += 4;
+            }
+            if (buildingElectricityFee) {
+                additionalFees += 4;
+            }
+
+            // 计算总费用
+            var totalAmount = rent + chargingFee + waterFee + electricityFee + additionalFees;
+
+            // 显示结果
+            var resultElement = document.getElementById("result");
+            resultElement.innerHTML = "水费：" + waterFee + "元<br>";
+            resultElement.innerHTML += "电费：" + electricityFee + "元<br>";
+            resultElement.innerHTML += "其他费用：" + additionalFees + "元<br>";
+            resultElement.innerHTML += "房客应支付金额：" + totalAmount + "元";
+
+            // 根据条件设置样式
+            if (currentWater === 0 || previousWater === 0 || currentElectricity === 0 || previousElectricity === 0) {
+                resultElement.style.backgroundColor = "yellow";
+            } else {
+                resultElement.style.backgroundColor = "white";
+            }
+        }
+    </script>
+</body>
+</html>
