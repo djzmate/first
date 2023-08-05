@@ -1,95 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>æˆ¿å®¢æ”¯ä»˜è´¹ç”¨è®¡ç®—å™¨</title>
-   <meta charset="utf-8">
-  <style>
-    .highlight {
-      background-color: yellow;
-    }
-  </style>
+    <title>·ÑÓÃ¼ÆËãÆ÷</title>
+     <meta charset="utf-8"> 
+    <style>
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
 </head>
 <body>
-  <h1>æˆ¿å®¢æ”¯ä»˜è´¹ç”¨è®¡ç®—å™¨</h1>
+    <h1>·¿×â¼ÆËãÆ÷</h1>
 
-  <h3>è¾“å…¥ä¿¡æ¯</h3>
-  <label for="currentWater">æœ¬æœˆæ°´è¡¨è¯»æ•°ï¼š</label>
-  <input type="number" id="currentWater"><br>
+    <form id="calculatorForm">
+        <label for="waterThisMonth">±¾ÔÂË®±íÊ¾Êı£º</label>
+        <input type="number" id="waterThisMonth" name="waterThisMonth"><br><br>
 
-  <label for="previousWater">ä¸Šæœˆæ°´è¡¨è¯»æ•°ï¼š</label>
-  <input type="number" id="previousWater"><br>
+        <label for="waterLastMonth">ÉÏÔÂË®±íÊ¾Êı£º</label>
+        <input type="number" id="waterLastMonth" name="waterLastMonth"><br><br>
 
-  <label for="currentElectricity">æœ¬æœˆç”µè¡¨è¯»æ•°ï¼š</label>
-  <input type="number" id="currentElectricity"><br>
+        <label for="electricityThisMonth">±¾ÔÂµç±íÊ¾Êı£º</label>
+        <input type="number" id="electricityThisMonth" name="electricityThisMonth"><br><br>
 
-  <label for="previousElectricity">ä¸Šæœˆç”µè¡¨è¯»æ•°ï¼š</label>
-  <input type="number" id="previousElectricity"><br>
+        <label for="electricityLastMonth">ÉÏÔÂµç±íÊ¾Êı£º</label>
+        <input type="number" id="electricityLastMonth" name="electricityLastMonth"><br><br>
 
-  <label for="rent">æˆ¿ç§Ÿï¼š</label>
-  <input type="number" id="rent"><br>
+        <label for="electricityRate">µç·Ñµ¥¼Û£º</label>
+        <select id="electricityRate" name="electricityRate">
+            <option value="1.00">1ÔªÃ¿¶È</option>
+            <option value="0.95">0.95ÔªÃ¿¶È</option>
+            <option value="0.75">0.75ÔªÃ¿¶È</option>
+            <option value="0.65">0.65ÔªÃ¿¶È</option>
+        </select><br><br>
 
-  <label for="chargingFee">å……ç”µè´¹ï¼š</label>
-  <input type="number" id="chargingFee" value="15"><br>
+        <label for="includeAdditionalFees">ÊÇ·ñ°üº¬¶îÍâ·ÑÓÃ£º</label>
+        <input type="checkbox" id="includeAdditionalFees" name="includeAdditionalFees"><br><br>
 
-  <h4>é»˜è®¤åŠ å…¥è´¹ç”¨ï¼š</h4>
-  <input type="checkbox" id="garbageFee" checked>
-  <label for="garbageFee">åƒåœ¾è´¹ï¼ˆ5å…ƒï¼‰</label><br>
+        <label for="chargingFee">³äµç·Ñ£º</label>
+        <input type="number" id="chargingFee" name="chargingFee"><br><br>
 
-  <input type="checkbox" id="stairCleaningFee" checked>
-  <label for="stairCleaningFee">æ¥¼æ¢¯å«ç”Ÿè´¹ï¼ˆ4å…ƒï¼‰</label><br>
+        <label for="rent">·¿×â£º</label>
+        <input type="number" id="rent" name="rent"><br><br>
 
-  <input type="checkbox" id="elevatorElectricityFee" checked>
-  <label for="elevatorElectricityFee">æ¥¼ç”µè´¹ï¼ˆ4å…ƒï¼‰</label><br>
+        <input type="submit" value="¼ÆËã·ÑÓÃ">
+    </form>
 
-  <h4>ç”µåŠ›å•ä»·ï¼š</h4>
-  <input type="radio" name="electricityRate" value="1" checked>
-  <label for="electricityRate">1å…ƒ/åº¦</label><br>
+    <h2>ÏêÏ¸·ÑÓÃ</h2>
+    <div id="detailedCost"></div>
 
-  <input type="radio" name="electricityRate" value="0.95">
-  <label for="electricityRate">0.95å…ƒ/åº¦</label><br>
+    <script>
+        document.getElementById("calculatorForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-  <input type="radio" name="electricityRate" value="0.75">
-  <label for="electricityRate">0.75å…ƒ/åº¦</label><br>
+            var waterThisMonth = parseFloat(document.getElementById("waterThisMonth").value) || 0;
+            var waterLastMonth = parseFloat(document.getElementById("waterLastMonth").value) || 0;
+            var electricityThisMonth = parseFloat(document.getElementById("electricityThisMonth").value) || 0;
+            var electricityLastMonth = parseFloat(document.getElementById("electricityLastMonth").value) || 0;
+            var electricityRate = parseFloat(document.getElementById("electricityRate").value);
+            var includeAdditionalFees = document.getElementById("includeAdditionalFees").checked;
+            var chargingFee = parseFloat(document.getElementById("chargingFee").value) || 0;
+            var rent = parseFloat(document.getElementById("rent").value);
 
-  <input type="radio" name="electricityRate" value="0.65">
-  <label for="electricityRate">0.65å…ƒ/åº¦</label><br>
+            var waterCost = 5 * (waterThisMonth - waterLastMonth);
+            var electricityCost = electricityRate * (electricityThisMonth - electricityLastMonth);
+            var additionalFees = 0;
 
-  <button onclick="calculatePayment()">è®¡ç®—è´¹ç”¨</button>
+            if (includeAdditionalFees) {
+                additionalFees = 5 + 4 + 4;
+            }
 
-  <h3>æ”¯ä»˜è´¹ç”¨ç»“æœ</h3>
-  <div id="paymentResults"></div>
+            var totalCost = waterCost + electricityCost + additionalFees + chargingFee + rent;
 
-  <script>
-    function calculatePayment() {
-      var currentWater = parseFloat(document.getElementById("currentWater").value) || 0;
-      var previousWater = parseFloat(document.getElementById("previousWater").value) || 0;
-      var currentElectricity = parseFloat(document.getElementById("currentElectricity").value) || 0;
-      var previousElectricity = parseFloat(document.getElementById("previousElectricity").value) || 0;
-      var rent = parseFloat(document.getElementById("rent").value) || 0;
-      var chargingFee = parseFloat(document.getElementById("chargingFee").value) || 15;
-      var garbageFee = document.getElementById("garbageFee").checked ? 5 : 0;
-      var stairCleaningFee = document.getElementById("stairCleaningFee").checked ? 4 : 0;
-      var elevatorElectricityFee = document.getElementById("elevatorElectricityFee").checked ? 4 : 0;
-      var electricityRate = parseFloat(document.querySelector('input[name="electricityRate"]:checked').value);
+            var detailedCostElement = document.getElementById("detailedCost");
+            detailedCostElement.innerHTML = "";
 
-      var waterConsumption = currentWater - previousWater;
-      var electricityConsumption = currentElectricity - previousElectricity;
+            if (waterThisMonth === 0 || waterLastMonth === 0) {
+                detailedCostElement.innerHTML += "<p class='highlight'>Ë®±íÊ¾ÊıÎ´ÊäÈë</p>";
+            }
 
-      var waterCost = waterConsumption * 5;
-      var electricityCost = electricityConsumption * electricityRate;
-      var totalCost = rent + chargingFee + garbageFee + stairCleaningFee + elevatorElectricityFee + waterCost + electricityCost;
+            if (electricityThisMonth === 0 || electricityLastMonth === 0) {
+                detailedCostElement.innerHTML += "<p class='highlight'>µç±íÊ¾ÊıÎ´ÊäÈë</p>";
+            }
 
-      var results = "<p>æ°´è´¹ï¼š" + waterCost.toFixed(2) + "å…ƒ</p>";
-      results += "<p>ç”µè´¹ï¼š" + electricityCost.toFixed(2) + "å…ƒ</p>";
-      results += "<p>æˆ¿ç§Ÿï¼š" + rent.toFixed(2) + "å…ƒ</p>";
-      results += "<p>å……ç”µè´¹ï¼š" + chargingFee.toFixed(2) + "å…ƒ</p>";
-      results += "<p>åƒåœ¾è´¹ï¼š" + garbageFee.toFixed(2) + "å…ƒ</p>";
-      results += "<p>æ¥¼æ¢¯å«ç”Ÿè´¹ï¼š" + stairCleaningFee.toFixed(2) + "å…ƒ</p>";
-      results += "<p>æ¥¼ç”µè´¹ï¼š" + elevatorElectricityFee.toFixed(2) + "å…ƒ</p>";
-      results += "<p>æ€»è´¹ç”¨ï¼š" + totalCost.toFixed(2) + "å…ƒ</p>";
+            if (!includeAdditionalFees) {
+                detailedCostElement.innerHTML += "<p class='highlight'>¶îÍâ·ÑÓÃÎ´Ñ¡Ôñ</p>";
+            }
 
-      document.getElementById("paymentResults").innerHTML = results;
-    }
-  </script>
+            detailedCostElement.innerHTML += "<p>Ë®·Ñ£º" + waterCost.toFixed(2) + "Ôª</p>";
+            detailedCostElement.innerHTML += "<p>µç·Ñ£º" + electricityCost.toFixed(2) + "Ôª</p>";
+            detailedCostElement.innerHTML += "<p>¶îÍâ·ÑÓÃ£º" + additionalFees.toFixed(2) + "Ôª</p>";
+            detailedCostElement.innerHTML += "<p>³äµç·Ñ£º" + chargingFee.toFixed(2) + "Ôª</p>";
+            detailedCostElement.innerHTML += "<p>·¿×â£º" + rent.toFixed(2) + "Ôª</p>";
+            detailedCostElement.innerHTML += "<h3>×Ü·ÑÓÃ£º" + totalCost.toFixed(2) + "Ôª</h3>";
+        });
+    </script>
 </body>
 </html>
