@@ -1,0 +1,495 @@
+<!-- AI生成 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>你想我了吗？</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --accent-warm: #e8a87c;
+      --accent-soft: #f4d4b0;
+      --accent-glow: rgba(232, 168, 124, 0.15);
+      --text-primary: #f5f5f5;
+      --text-secondary: #c4c4c4;
+      --text-muted: #8888a0;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 40px rgba(232, 168, 124, 0.2);
+      --radius: 16px;
+      --transition: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+                   "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      position: relative;
+    }
+
+    /* ===== Animated Background ===== */
+    .bg-gradient {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 20%, #1e2a4a 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, #2a1e3a 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, #1a1a2e 0%, #0f0f1e 100%);
+      z-index: 0;
+    }
+
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent-warm);
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* ===== Main Container ===== */
+    .container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    /* ===== Title ===== */
+    .title-wrapper {
+      margin-bottom: 3.5rem;
+      animation: fadeInDown 1.2s var(--transition) both;
+    }
+
+    .title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--accent-warm) 0%, var(--accent-soft) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      letter-spacing: 0.3em;
+      font-weight: 300;
+      animation: fadeIn 1.8s var(--transition) 0.5s both;
+    }
+
+    /* ===== Buttons ===== */
+    .button-group {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 1.2s var(--transition) 0.3s both;
+    }
+
+    .btn {
+      position: relative;
+      padding: 1rem 2.2rem;
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.4s var(--transition),
+                  box-shadow 0.4s var(--transition),
+                  border-color 0.4s var(--transition);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      min-width: 160px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, var(--accent-glow) 100%);
+      opacity: 0;
+      transition: opacity 0.4s var(--transition);
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s var(--transition), height 0.6s var(--transition);
+    }
+
+    .btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: var(--accent-warm);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .btn:hover::before {
+      opacity: 1;
+    }
+
+    .btn:active {
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    .btn span {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Button A — 还好 */
+    .btn-a {
+      background: rgba(30, 42, 74, 0.6);
+      color: var(--text-secondary);
+    }
+
+    .btn-a:hover {
+      color: var(--accent-soft);
+    }
+
+    /* Button B — 是的 */
+    .btn-b {
+      background: rgba(232, 168, 124, 0.08);
+      color: var(--accent-warm);
+      border-color: rgba(232, 168, 124, 0.2);
+    }
+
+    .btn-b:hover {
+      color: var(--accent-soft);
+      background: rgba(232, 168, 124, 0.12);
+    }
+
+    /* ===== Modal ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 20, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s var(--transition),
+                  visibility 0.5s var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: linear-gradient(145deg, #1e2a4a 0%, #16213e 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: var(--shadow-soft), var(--shadow-glow);
+      transform: scale(0.85) translateY(20px);
+      transition: transform 0.5s var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-warm), transparent);
+    }
+
+    .modal-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1.2rem;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .modal-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--accent-warm);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .modal-message {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      letter-spacing: 0.03em;
+      margin-bottom: 1.8rem;
+      font-weight: 400;
+    }
+
+    .modal-close {
+      padding: 0.7rem 2rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--accent-warm);
+      background: rgba(232, 168, 124, 0.1);
+      border: 1px solid rgba(232, 168, 124, 0.25);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s var(--transition);
+    }
+
+    .modal-close:hover {
+      background: rgba(232, 168, 124, 0.2);
+      border-color: var(--accent-warm);
+      transform: scale(1.05);
+    }
+
+    .modal-close:active {
+      transform: scale(0.97);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      opacity: 0.5;
+      z-index: 10;
+      animation: fadeIn 3s var(--transition) 1s both;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(232, 168, 124, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 0 12px rgba(232, 168, 124, 0);
+      }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 480px) {
+      .button-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+
+      .btn {
+        min-width: auto;
+        width: 100%;
+      }
+
+      .container {
+        padding: 1.5rem;
+      }
+
+      .title-wrapper {
+        margin-bottom: 2.5rem;
+      }
+    }
+
+    /* ===== Reduced Motion ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-gradient"></div>
+  <div class="bg-particles" id="particles"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="title-wrapper">
+      <h1 class="title">你想我了吗？</h1>
+      <p class="subtitle">— 选一个回答 —</p>
+    </div>
+
+    <div class="button-group">
+      <button class="btn btn-a" onclick="showModal('a')">
+        <span>还好</span>
+      </button>
+      <button class="btn btn-b" onclick="showModal('b')">
+        <span>是的，我茶不思饭不想</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+      <p class="modal-message" id="modalMessage"></p>
+      <button class="modal-close" onclick="closeModal()">我知道了</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">用心倾听 · 温暖回应</div>
+
+  <script>
+    // ===== Modal Messages =====
+    const messages = {
+      a: '好的好的，一代人有一代人的长征路，请放心',
+      b: '天高仍鸟飞，但候鸟总会飞回同一个地方，那是赖以栖息的庇护所，请放心，一切安好'
+    };
+
+    // ===== Show Modal =====
+    function showModal(button) {
+      const overlay = document.getElementById('modalOverlay');
+      const messageEl = document.getElementById('modalMessage');
+      messageEl.textContent = messages[button];
+      overlay.classList.add('active');
+    }
+
+    // ===== Close Modal =====
+    function closeModal(event) {
+      if (event && event.target !== document.getElementById('modalOverlay')) return;
+      const overlay = document.getElementById('modalOverlay');
+      overlay.classList.remove('active');
+    }
+
+    // ===== Keyboard Support =====
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const overlay = document.getElementById('modalOverlay');
+        overlay.classList.remove('active');
+      }
+    });
+
+    // ===== Particle Background =====
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const count = window.innerWidth < 768 ? 15 : 30;
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 8 + 8) + 's';
+        particle.style.animationDelay = Math.random() * 10 + 's';
+        particle.style.width = (Math.random() * 4 + 2) + 'px';
+        particle.style.height = particle.style.width;
+        container.appendChild(particle);
+      }
+    }
+
+    createParticles();
+  </script>
+</body>
+</html>
